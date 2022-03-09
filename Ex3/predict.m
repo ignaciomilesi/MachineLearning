@@ -21,12 +21,17 @@ p = zeros(size(X, 1), 1);
 %       can use max(A, [], 2) to obtain the max for each row.
 %
 
+%capa de entrada sumo el a0
+a1 = [ones(size(X, 1), 1) X]; 
 
+%capa intermedia
+a2 = sigmoid(a1*Theta1');
+a2 = [ones(size(a2, 1), 1) a2];%sumo el a0
 
+%capa salida
+a3 = sigmoid(a2*Theta2');
 
-
-
-
+[valores, p] = max(a3, [], 2); %p son los indices de los maximos
 
 
 % =========================================================================
