@@ -27,8 +27,9 @@ m = size(X, 1);
          
 % You need to return the following variables correctly 
 J = 0;
-Theta1_grad = zeros(size(Theta1));
-Theta2_grad = zeros(size(Theta2));
+Theta1_grad = zeros(size(Theta1)); %25 x 401
+Theta2_grad = zeros(size(Theta2)); %10 x 26
+
 
 % ====================== YOUR CODE HERE ======================
 % Instructions: You should complete the code by working through the
@@ -63,8 +64,11 @@ Theta2_grad = zeros(size(Theta2));
 %
 
 %calculo las prediciones en matriz
-h1 = sigmoid([ones(m, 1) X] * Theta1');
-h2 = sigmoid([ones(m, 1) h1] * Theta2'); 
+%a1 = X;
+z2 = [ones(m, 1) X] * Theta1'; % 5000 x 401  25 x 401
+a2 = sigmoid(z2); % 5000 x 25
+z3 = [ones(m, 1) a2] * Theta2'; % 5000 x 26   10 x 26
+a3 = sigmoid(z3); % 5000 x 10
 
 %paso los resultados de vector a matriz binaria
 yh = zeros(length(y), num_labels);
@@ -79,7 +83,7 @@ end;
   %Calculo el costo
  for i=1 : m;
    
-   h2a = h2(i,:);
+   h2a = a3(i,:);
    yha = yh(i,:);
    
   s = -1*yha*log(h2a)' - (1-yha)*log(1-h2a)';
@@ -98,6 +102,53 @@ J += reg;
 
 
 % -------------------------------------------------------------
+% Back Propagation (propagacion hacia atras)
+
+z2 = [ones(m, 1) z2]; % 5000 x 26 (le agrego una columna de 1)
+%Theta1 25 x 401
+%Theta2 10 x 26
+
+delta3 = a3 - yh; %5000 x 10
+
+delta2 = (delta3 * Theta2) .* sigmoidGradient(z2); %5000 x 10 10 x 26 .* 5000 x 26
+delta2 = delta2(:,2:end); %5000 x 25
+
+Theta1_grad = delta2' * [ones(m, 1) X]; %5000 x 25  5000 x 401 
+Theta1_grad = Theta1_grad ./ m; %25 x 401
+
+Theta2_grad = delta3' * [ones(m, 1) a2]; %5000 x 10  5000 x 26
+Theta2_grad = Theta2_grad ./ m; %10 x 26
+
+Theta1_grad(:, 2:end) = Theta1_grad(:, 2:end) + (lambda/m) * Theta1(:, 2:end); %regularizo (sin los primeros valores)
+
+Theta2_grad(:, 2:end) = Theta2_grad(:, 2:end) + (lambda/m) * Theta2(:, 2:end);
+
+
+##for row = 1:m
+##    a1 = [1 X(row,:)]';
+##    z2 = Theta1 * a1;
+##    a2 = sigmoid(z2);
+##    a2 = [1; a2];
+##    z3 = Theta2 * a2;
+##    a3 = sigmoid(z3);
+## 
+##    z2 = [1; z2];
+##    delta3 = a3 - yh'(:, row);
+##    delta2 = (Theta2' * delta3) .* sigmoidGradient(z2);
+##    delta2 = delta2(2:end);
+## 
+##    Theta1_grad = Theta1_grad + delta2 * a1';
+##    Theta2_grad = Theta2_grad + delta3 * a2';
+## 
+##end
+## 
+##Theta1_grad = Theta1_grad ./ m;
+##Theta1_grad(:, 2:end) = Theta1_grad(:, 2:end) ...
+##        + (lambda/m) * Theta1(:, 2:end);
+##Theta2_grad = Theta2_grad ./ m;
+##Theta2_grad(:, 2:end) = Theta2_grad(:, 2:end) + ...
+##        + (lambda/m) * Theta2(:, 2:end);
+
 
 % =========================================================================
 
