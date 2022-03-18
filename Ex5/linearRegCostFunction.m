@@ -19,16 +19,31 @@ grad = zeros(size(theta));
 %               You should set J to the cost and grad to the gradient.
 %
 
+h = X*theta;
 
+resta = (h-y);
 
+J = sum(resta.^2) / (2*m);
 
+f = theta.^2;
 
+f(1) = 0;
 
+f = (lambda/(2*m)) * sum(f); %factor de regularizacion
 
+J += f;
 
+%gradiente
 
+mult = resta' * X;
 
+grad = mult'/m;
 
+f = lambda * theta / m;
+
+f(1) = 0;
+
+grad += f;
 
 % =========================================================================
 
