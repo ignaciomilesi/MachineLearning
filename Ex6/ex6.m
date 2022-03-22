@@ -54,8 +54,29 @@ C = 1;
 model = svmTrain(X, y, C, @linearKernel, 1e-3, 20);
 visualizeBoundaryLinear(X, y, model);
 
-fprintf('Program paused. Press enter to continue.\n');
+fprintf('Program paused. Press enter to continue 1.\n');
 pause;
+
+##C = 1000;
+##model = svmTrain(X, y, C, @linearKernel, 1e-3, 20);
+##visualizeBoundaryLinear(X, y, model);
+##
+##fprintf('Program paused. Press enter to continue 1000.\n');
+##pause;
+##
+##C = 10000;
+##model = svmTrain(X, y, C, @linearKernel, 1e-3, 20);
+##visualizeBoundaryLinear(X, y, model);
+##
+##fprintf('Program paused. Press enter to continue 10000.\n');
+##pause;
+##
+##C = 0.01;
+##model = svmTrain(X, y, C, @linearKernel, 1e-3, 20);
+##visualizeBoundaryLinear(X, y, model);
+##
+##fprintf('Program paused. Press enter to continue 0.01.\n');
+##pause;
 
 %% =============== Part 3: Implementing Gaussian Kernel ===============
 %  You will now implement the Gaussian kernel to use
@@ -139,7 +160,7 @@ pause;
 load('ex6data3.mat');
 
 % Try different SVM Parameters here
-[C, sigma] = dataset3Params(X, y, Xval, yval);
+[C, sigma] = dataset3Params(X, y, Xval, yval)
 
 % Train the SVM
 model= svmTrain(X, y, C, @(x1, x2) gaussianKernel(x1, x2, sigma));
