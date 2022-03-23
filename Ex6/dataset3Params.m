@@ -27,7 +27,7 @@ sigma_prueba = [0.01; 0.03; 0.1; 0.3; 1; 3; 10; 30];
 
 n = size(C_prueba, 1);
 m = size(sigma_prueba, 1);
-error = [0, 1, 1];
+error = [0, 0, 0];
 
 for i=1 : n;
   for j=1 : n;
@@ -40,10 +40,12 @@ for i=1 : n;
     
     ee = mean(double(predictions ~= yval));
     
-    if (error(2) == 1 & error(3) == 1)
-      error(1) = 0;
+    if (error(2) == 0 && error(3) == 0)
+      error(1) = ee;
+      error(2) = i;
+      error(3) = j;
       
-    elseif (ee < erroor(1))
+    elseif (ee < error(1))
       error(1) = ee;
       error(2) = i;
       error(3) = j;
